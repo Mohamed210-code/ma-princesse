@@ -1103,6 +1103,38 @@ function Nav({ musicOn, onToggleMusic }) {
   return (
     <>
       <style>{`
+        /* ════ RESPONSIVE VARIABLES ════ */
+        :root {
+          --nav-padding-x: 2rem;
+          --nav-padding-y: 0.85rem;
+          --logo-size: 70px;
+          --links-gap: 2rem;
+          --links-font-size: 0.75rem;
+          --music-btn-size: 40px;
+        }
+
+        @media (max-width: 768px) {
+          :root {
+            --nav-padding-x: 1.2rem;
+            --nav-padding-y: 0.7rem;
+            --logo-size: 60px;
+            --links-gap: 1.2rem;
+            --links-font-size: 0.65rem;
+            --music-btn-size: 38px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          :root {
+            --nav-padding-x: 0.75rem;
+            --nav-padding-y: 0.6rem;
+            --logo-size: 48px;
+            --links-gap: 0.6rem;
+            --links-font-size: 0.55rem;
+            --music-btn-size: 36px;
+          }
+        }
+
         @keyframes spinRing    { to { transform: rotate(360deg); } }
         @keyframes spinRingRev { to { transform: rotate(-360deg); } }
         @keyframes eqBar       { from { transform: scaleY(0.2); } to { transform: scaleY(1); } }
@@ -1149,7 +1181,7 @@ function Nav({ musicOn, onToggleMusic }) {
         .nav-bar {
           position: sticky; top: 0; z-index: 100;
           display: flex; align-items: center; justify-content: space-between;
-          padding: .85rem 2rem;
+          padding: var(--nav-padding-y) var(--nav-padding-x);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
           background: linear-gradient(
@@ -1160,7 +1192,16 @@ function Nav({ musicOn, onToggleMusic }) {
             rgba(30,4,22,0.96) 100%
           );
           border-bottom: 1px solid transparent;
+          gap: 1rem;
+          flex-wrap: wrap;
         }
+
+        @media (max-width: 480px) {
+          .nav-bar {
+            gap: 0.5rem;
+          }
+        }
+
         .nav-border-top {
           position: absolute; top: 0; left: 0; right: 0; height: 1px;
           background: linear-gradient(90deg,
@@ -1199,7 +1240,15 @@ function Nav({ musicOn, onToggleMusic }) {
         }
         .nav-corner {
           position: absolute; width: 14px; height: 14px; pointer-events: none;
+          display: none;
         }
+
+        @media (min-width: 769px) {
+          .nav-corner {
+            display: block;
+          }
+        }
+
         .nav-corner.tl { top: 4px; left: 8px;
           border-top: 1.5px solid rgba(244,114,182,0.5);
           border-left: 1.5px solid rgba(244,114,182,0.5); }
@@ -1214,7 +1263,12 @@ function Nav({ musicOn, onToggleMusic }) {
           border-right: 1.5px solid rgba(244,114,182,0.5); }
 
         /* ════ LOGO ════ */
-        .logo-outer { position: relative; width: 70px; height: 70px; flex-shrink: 0; }
+        .logo-outer { 
+          position: relative; 
+          width: var(--logo-size); 
+          height: var(--logo-size); 
+          flex-shrink: 0; 
+        }
         .logo-ring-1 {
           position: absolute; inset: -6px; border-radius: 24px;
           background: conic-gradient(from 0deg,
@@ -1257,9 +1311,12 @@ function Nav({ musicOn, onToggleMusic }) {
         .logo-particle.p3 { width:2.5px; height:2.5px; background:#fff; bottom:4px; left:8px; animation: particleDrift 2.4s 1.2s ease-out infinite; }
         .logo-particle.p4 { width:3px; height:3px; background:#f472b6; bottom:2px; right:-2px; animation: particleDrift2 2.1s .3s ease-out infinite; }
         .logo-particle.p5 { width:2px; height:2px; background:#fbbde4; top:50%; left:-4px; animation: particleDrift 1.9s .9s ease-out infinite; }
+        
         .logo-img-wrap {
           position: relative; z-index: 1;
-          height: 70px; width: 70px; overflow: hidden;
+          height: var(--logo-size); 
+          width: var(--logo-size); 
+          overflow: hidden;
           border-radius: 18px;
           border: 2px solid rgba(244,114,182,0.55);
           box-shadow:
@@ -1288,17 +1345,44 @@ function Nav({ musicOn, onToggleMusic }) {
         .logo-img-wrap:hover img { transform: scale(1.78); }
 
         /* ════ LINKS CSS ONLY ════ */
-        .nav-links-ul { display: flex; gap: 2rem; list-style: none; }
+        .nav-links-ul { 
+          display: flex; 
+          gap: var(--links-gap); 
+          list-style: none;
+          flex-wrap: wrap;
+          justify-content: center;
+          flex: 1;
+          min-width: 150px;
+        }
+
+        @media (max-width: 768px) {
+          .nav-links-ul {
+            order: 3;
+            width: 100%;
+            justify-content: center;
+          }
+        }
+
         .nav-links-ul a {
           position: relative;
           font-family: 'DM Sans', sans-serif;
-          font-size: .75rem; letter-spacing: 3px;
+          font-size: var(--links-font-size);
+          letter-spacing: 2px;
           text-transform: uppercase;
-          color: ${C.muted};
+          color: inherit;
           text-decoration: none;
           transition: color .3s;
           padding-bottom: 4px;
+          white-space: nowrap;
         }
+
+        @media (max-width: 480px) {
+          .nav-links-ul a {
+            letter-spacing: 1px;
+            padding-bottom: 2px;
+          }
+        }
+
         .nav-links-ul a::before {
           content: '';
           position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%);
@@ -1328,7 +1412,9 @@ function Nav({ musicOn, onToggleMusic }) {
         /* ════ MUSIC BUTTON ════ */
         .music-btn {
           position: relative;
-          width: 40px; height: 40px; border-radius: 50%;
+          width: var(--music-btn-size); 
+          height: var(--music-btn-size); 
+          border-radius: 50%;
           border: 1px solid rgba(244,114,182,0.4);
           background: radial-gradient(circle at 50% 50%, rgba(244,114,182,0.06), transparent 70%);
           cursor: pointer;
@@ -1336,6 +1422,7 @@ function Nav({ musicOn, onToggleMusic }) {
           transition: border-color .3s;
           animation: musicGlow 4s ease-in-out infinite;
           overflow: visible;
+          flex-shrink: 0;
         }
         .music-btn:hover {
           border-color: rgba(244,114,182,0.75);
@@ -1366,7 +1453,34 @@ function Nav({ musicOn, onToggleMusic }) {
           display: flex; align-items: flex-end; gap: 2px;
           height: 15px; position: relative; z-index: 1;
         }
-        .eq-bars span { width: 2.5px; border-radius: 2px; display: block; transform-origin: bottom; }
+
+        @media (max-width: 480px) {
+          .eq-bars {
+            gap: 1.5px;
+            height: 12px;
+          }
+        }
+
+        .eq-bars span { 
+          width: 2.5px; 
+          border-radius: 2px; 
+          display: block; 
+          transform-origin: bottom; 
+        }
+
+        @media (max-width: 480px) {
+          .eq-bars span {
+            width: 2px;
+          }
+        }
+
+        /* ════ SVG ICON RESPONSIVE ════ */
+        @media (max-width: 480px) {
+          .music-btn svg {
+            width: 12px !important;
+            height: 12px !important;
+          }
+        }
       `}</style>
 
       <nav className="nav-bar">
@@ -1452,6 +1566,7 @@ function Nav({ musicOn, onToggleMusic }) {
     </>
   );
 }
+
 
 // ─── REVEAL WRAPPER ─────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0 }) {
@@ -3701,260 +3816,690 @@ function LibraryBackground() {
     </svg>
   );
 }
+
 function Letter() {
   return (
-    
-    <section id="lettre" style={{ background:"#0a0608", position:"relative", overflow:"hidden", padding:"4rem 1.2rem 5rem" }}>
-      <LibraryBackground />
-      {/* Background glow */}
-      <div style={{ position:"absolute", width:500, height:500, borderRadius:"50%", background:"rgba(255,111,183,.025)", left:"50%", top:"50%", transform:"translate(-50%,-50%)", pointerEvents:"none" }} />
-
-      {/* Floating dust particles */}
-      {[
-        { left:"8%", top:"80%", delay:"0s", dur:"8s", size:3 },
-        { left:"90%", top:"70%", delay:"2s", dur:"11s", size:2 },
-        { left:"15%", top:"40%", delay:"4s", dur:"9s", size:3 },
-        { left:"80%", top:"20%", delay:"1s", dur:"13s", size:2 },
-        { left:"50%", top:"90%", delay:"3s", dur:"7s", size:4 },
-        { left:"35%", top:"60%", delay:"5.5s", dur:"10s", size:2 },
-      ].map((p,i) => (
-        <div key={i} style={{
-          position:"absolute", borderRadius:"50%",
-          background:"#ff6fb7",
-          width:p.size, height:p.size,
-          left:p.left, top:p.top,
-          animation:`letterFloat ${p.dur} linear ${p.delay} infinite`,
-          pointerEvents:"none",
-        }} />
-      ))}
-
-      {/* Keyframes injection */}
+    <>
       <style>{`
+        /* ════ RESPONSIVE VARIABLES ════ */
+        :root {
+          --letter-padding: 4rem 1.2rem 5rem;
+          --letter-max-width: 860px;
+          --book-spine-width: 28px;
+          --book-cover-width: 36px;
+          --intro-margin: 3rem;
+          --intro-font-size: clamp(2rem, 4.5vw, 3rem);
+          --intro-label-size: 9px;
+          --page-padding: 3rem 2.6rem 3.8rem;
+          --page-font-size: 1.06rem;
+          --page-line-height: 2.1;
+          --quill-bottom: -30px;
+          --quill-right: -20px;
+          --quill-width: 90px;
+          --quill-height: 220px;
+          --wax-seal-size: 46px;
+          --closing-font-size: 10px;
+        }
+
+        /* TABLET - 768px and below */
+        @media (max-width: 768px) {
+          :root {
+            --letter-padding: 3rem 1rem 3.5rem;
+            --letter-max-width: 100%;
+            --intro-margin: 2rem;
+            --intro-font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            --intro-label-size: 8px;
+            --page-padding: 2rem 1.8rem 2.5rem;
+            --page-font-size: 0.95rem;
+            --page-line-height: 1.9;
+            --quill-bottom: -20px;
+            --quill-right: -10px;
+            --quill-width: 70px;
+            --quill-height: 170px;
+            --wax-seal-size: 40px;
+            --closing-font-size: 9px;
+          }
+        }
+
+        /* MOBILE - 480px and below */
+        @media (max-width: 480px) {
+          :root {
+            --letter-padding: 2rem 0.75rem 2.5rem;
+            --letter-max-width: 100%;
+            --book-spine-width: 20px;
+            --book-cover-width: 28px;
+            --intro-margin: 1.5rem;
+            --intro-font-size: clamp(1.3rem, 3vw, 1.8rem);
+            --intro-label-size: 7px;
+            --page-padding: 1.5rem 1.2rem 1.8rem;
+            --page-font-size: 0.85rem;
+            --page-line-height: 1.7;
+            --quill-bottom: -15px;
+            --quill-right: -5px;
+            --quill-width: 55px;
+            --quill-height: 140px;
+            --wax-seal-size: 36px;
+            --closing-font-size: 8px;
+          }
+        }
+
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400&display=swap');
+        
         @keyframes letterFloat {
           0%   { transform: translateY(0) translateX(0); opacity: 0; }
           20%  { opacity: 1; }
           80%  { opacity: .4; }
           100% { transform: translateY(-120px) translateX(30px); opacity: 0; }
         }
+
+        .drop-cap::first-letter {
+          font-style: normal;
+          font-size: clamp(2rem, 6vw, 3.6rem);
+          font-weight: 600;
+          float: left;
+          line-height: .8;
+          margin-right: .08em;
+          margin-top: .08em;
+          color: #ff6fb7;
+          font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* ════ SECTION STYLES ════ */
+        .letter-section {
+          background: #0a0608;
+          position: relative;
+          overflow: hidden;
+          padding: var(--letter-padding);
+        }
+
+        .letter-intro {
+          text-align: center;
+          margin-bottom: var(--intro-margin);
+          position: relative;
+          z-index: 5;
+        }
+
+        .letter-intro-label {
+          font-family: 'DM Sans', sans-serif;
+          font-size: var(--intro-label-size);
+          letter-spacing: 6px;
+          text-transform: uppercase;
+          color: rgba(255, 111, 183, 0.5);
+          margin-bottom: 0.8rem;
+        }
+
+        @media (max-width: 480px) {
+          .letter-intro-label {
+            letter-spacing: 3px;
+          }
+        }
+
+        .letter-intro-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: var(--intro-font-size);
+          font-weight: 300;
+          color: #f0dde8;
+          line-height: 1.1;
+        }
+
+        /* ════ BOOK WRAPPER ════ */
+        .letter-book-wrapper {
+          max-width: var(--letter-max-width);
+          margin: 0 auto;
+          position: relative;
+          z-index: 5;
+        }
+
+        .letter-book {
+          display: flex;
+          border-radius: 3px 6px 6px 3px;
+          position: relative;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+          overflow: hidden;
+        }
+
+        /* ════ BOOK SPINE ════ */
+        .letter-spine {
+          width: var(--book-spine-width);
+          flex-shrink: 0;
+          background: linear-gradient(to right, #0f0408, #1a0810, #0f0408);
+          border-radius: 3px 0 0 3px;
+          border-left: 2px solid #2a0d18;
+          border-top: 1px solid #2a0d18;
+          border-bottom: 1px solid #2a0d18;
+          position: relative;
+        }
+
+        .letter-spine::after {
+          content: '';
+          position: absolute;
+          left: 50%;
+          top: 10%;
+          bottom: 10%;
+          width: 1px;
+          background: linear-gradient(to bottom, transparent, rgba(255, 111, 183, 0.2) 30%, rgba(255, 111, 183, 0.2) 70%, transparent);
+          transform: translateX(-50%);
+        }
+
+        /* ════ BOOK COVERS ════ */
+        .letter-cover {
+          width: var(--book-cover-width);
+          flex-shrink: 0;
+          background: #100610;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .letter-cover-left {
+          border-top: 1px solid #220d1a;
+          border-bottom: 1px solid #220d1a;
+        }
+
+        .letter-cover-left::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(255, 111, 183, 0.012) 4px, rgba(255, 111, 183, 0.012) 5px);
+          pointer-events: none;
+        }
+
+        .letter-cover-right {
+          border-top: 1px solid #220d1a;
+          border-bottom: 1px solid #220d1a;
+          border-right: 3px solid #060308;
+          border-radius: 0 5px 5px 0;
+        }
+
+        .letter-cover-right::before {
+          content: '';
+          position: absolute;
+          bottom: -6px;
+          left: 9px;
+          width: 10px;
+          height: 55px;
+          background: rgba(160, 40, 80, 0.45);
+        }
+
+        /* ════ PAGES BLOCK ════ */
+        .letter-pages {
+          flex: 1;
+          display: flex;
+          position: relative;
+        }
+
+        .letter-pages-shadow {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          z-index: 4;
+          pointer-events: none;
+        }
+
+        .letter-pages-shadow-left {
+          left: 0;
+          width: 22px;
+          background: linear-gradient(to right, rgba(0, 0, 0, 0.7), transparent);
+        }
+
+        .letter-pages-shadow-center {
+          left: 50%;
+          width: 32px;
+          transform: translateX(-50%);
+          background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.75) 45%, rgba(0, 0, 0, 0.75) 55%, rgba(0, 0, 0, 0.5));
+        }
+
+        .letter-pages-shadow-right {
+          right: 0;
+          width: 22px;
+          background: linear-gradient(to left, rgba(0, 0, 0, 0.7), transparent);
+        }
+
+        /* ════ PAGE STYLES ════ */
+        .letter-page {
+          flex: 1;
+          background: #100810;
+          padding: var(--page-padding);
+          position: relative;
+          border-top: 1px solid #1e0d18;
+          border-bottom: 1px solid #1e0d18;
+          overflow: hidden;
+        }
+
+        .letter-page-lines {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background-image: repeating-linear-gradient(transparent, transparent 30px, rgba(255, 111, 183, 0.038) 30px, rgba(255, 111, 183, 0.038) 31px);
+          background-position: 0 3rem;
+        }
+
+        .letter-page-content {
+          position: relative;
+          z-index: 2;
+        }
+
+        /* ════ BOOKMARK ════ */
+        .letter-bookmark {
+          position: absolute;
+          top: -1px;
+          right: 3rem;
+          width: 16px;
+          height: 64px;
+          background: #5a0e25;
+          clip-path: polygon(0 0, 100% 0, 100% 83%, 50% 100%, 0 83%);
+          z-index: 5;
+        }
+
+        @media (max-width: 480px) {
+          .letter-bookmark {
+            right: 1rem;
+            height: 50px;
+          }
+        }
+
+        /* ════ CHAPTER RULE ════ */
+        .letter-chapter-rule {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 2rem;
+        }
+
+        @media (max-width: 480px) {
+          .letter-chapter-rule {
+            margin-bottom: 1.2rem;
+          }
+        }
+
+        .letter-rule-line {
+          flex: 1;
+          height: 0.5px;
+          background: rgba(255, 111, 183, 0.18);
+        }
+
+        .letter-rule-dot {
+          width: 5px;
+          height: 5px;
+          background: rgba(255, 111, 183, 0.35);
+          transform: rotate(45deg);
+          flex-shrink: 0;
+        }
+
+        /* ════ TEXT STYLES ════ */
+        .letter-label {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 9px;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: rgba(255, 111, 183, 0.45);
+          margin-bottom: 1.8rem;
+        }
+
+        @media (max-width: 480px) {
+          .letter-label {
+            font-size: 8px;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+          }
+        }
+
+        .letter-paragraph {
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic;
+          font-size: var(--page-font-size);
+          line-height: var(--page-line-height);
+          color: rgba(240, 221, 232, 0.76);
+          text-align: justify;
+          margin-bottom: 1.25rem;
+        }
+
+        .letter-paragraph-closing {
+          color: rgba(240, 221, 232, 0.5);
+          font-size: clamp(0.8rem, 2.5vw, 0.93rem);
+        }
+
+        @media (max-width: 480px) {
+          .letter-paragraph {
+            text-align: left;
+            margin-bottom: 1rem;
+          }
+          .letter-paragraph-closing {
+            font-size: 0.8rem;
+          }
+        }
+
+        .letter-page-number {
+          position: absolute;
+          bottom: 1.3rem;
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 0.9rem;
+          font-weight: 300;
+          color: rgba(255, 111, 183, 0.2);
+          letter-spacing: 2px;
+        }
+
+        .letter-page-number-left {
+          left: 2.6rem;
+        }
+
+        .letter-page-number-right {
+          right: 2.6rem;
+        }
+
+        @media (max-width: 480px) {
+          .letter-page-number {
+            font-size: 0.8rem;
+          }
+          .letter-page-number-left {
+            left: 1.2rem;
+          }
+          .letter-page-number-right {
+            right: 1.2rem;
+          }
+        }
+
+        /* ════ WAX SEAL & CLOSING ════ */
+        .letter-closing {
+          display: flex;
+          align-items: center;
+          gap: 1.2rem;
+          margin-top: 2rem;
+        }
+
+        @media (max-width: 480px) {
+          .letter-closing {
+            gap: 0.8rem;
+            margin-top: 1rem;
+            flex-direction: column;
+            align-items: flex-start;
+          }
+        }
+
+        .letter-wax-seal {
+          width: var(--wax-seal-size);
+          height: var(--wax-seal-size);
+          border-radius: 50%;
+          flex-shrink: 0;
+          background: #380d1e;
+          border: 1.5px solid #6a1535;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(0.8rem, 2vw, 1.1rem);
+          font-style: italic;
+          color: rgba(255, 111, 183, 0.65);
+        }
+
+        .letter-wax-seal::before {
+          content: '';
+          position: absolute;
+          inset: 5px;
+          border-radius: 50%;
+          border: 1px solid rgba(255, 111, 183, 0.18);
+        }
+
+        .letter-closing-text {
+          font-family: 'DM Sans', sans-serif;
+          font-size: var(--closing-font-size);
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          color: rgba(255, 111, 183, 0.3);
+          line-height: 1.9;
+        }
+
+        @media (max-width: 480px) {
+          .letter-closing-text {
+            font-size: 7px;
+            letter-spacing: 1px;
+          }
+        }
+
+        /* ════ FIN ════ */
+        .letter-fin {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-top: 2rem;
+        }
+
+        @media (max-width: 480px) {
+          .letter-fin {
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+          }
+        }
+
+        .letter-fin-line {
+          flex: 1;
+          height: 0.5px;
+        }
+
+        .letter-fin-line-left {
+          background: linear-gradient(to right, transparent, rgba(255, 111, 183, 0.15));
+        }
+
+        .letter-fin-line-right {
+          background: linear-gradient(to left, transparent, rgba(255, 111, 183, 0.15));
+        }
+
+        .letter-fin-text {
+          font-size: 9px;
+          letter-spacing: 4px;
+          color: rgba(255, 111, 183, 0.2);
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+
+        @media (max-width: 480px) {
+          .letter-fin-text {
+            font-size: 7px;
+            letter-spacing: 2px;
+          }
+        }
+
+        /* ════ QUILL SVG ════ */
+        .letter-quill {
+          position: absolute;
+          bottom: var(--quill-bottom);
+          right: var(--quill-right);
+          z-index: 6;
+          opacity: 0.85;
+          width: var(--quill-width);
+          height: var(--quill-height);
+        }
+
+        @media (max-width: 768px) {
+          .letter-quill {
+            opacity: 0.7;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .letter-quill {
+            opacity: 0.6;
+          }
+        }
+
+        /* ════ INK TRAIL ════ */
+        .letter-ink-trail {
+          position: absolute;
+          bottom: 42px;
+          right: 40px;
+          z-index: 6;
+          opacity: 0.3;
+          width: 180px;
+          height: 30px;
+        }
+
+        @media (max-width: 480px) {
+          .letter-ink-trail {
+            bottom: 30px;
+            right: 20px;
+            width: 140px;
+            height: 25px;
+            opacity: 0.2;
+          }
+        }
+
+        /* ════ GLOW EFFECT ════ */
+        .letter-glow {
+          position: absolute;
+          width: 500px;
+          height: 500px;
+          border-radius: 50%;
+          background: rgba(255, 111, 183, 0.025);
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+          .letter-glow {
+            width: 400px;
+            height: 400px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .letter-glow {
+            width: 300px;
+            height: 300px;
+          }
+        }
+
+        /* ════ DUST PARTICLES ════ */
+        .letter-dust {
+          position: absolute;
+          border-radius: 50%;
+          background: #ff6fb7;
+          pointer-events: none;
+        }
       `}</style>
 
-      {/* Section intro */}
-      <div style={{ textAlign:"center", marginBottom:"3rem", position:"relative", zIndex:5 }}>
-        <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:6, textTransform:"uppercase", color:"rgba(255,111,183,.5)", marginBottom:".8rem" }}>
-          A letter for you
-        </p>
-        <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(2rem,4.5vw,3rem)", fontWeight:300, color:"#f0dde8", lineHeight:1.1 }}>
-          Dear <em style={{ fontStyle:"italic", color:"#ff6fb7" }}>My Princess</em>
-        </h2>
-      </div>
+      <section className="letter-section">
+        <LibraryBackground />
+        
+        <div className="letter-glow" />
 
-      {/* Book wrapper */}
-      <div style={{ maxWidth:860, margin:"0 auto", position:"relative", zIndex:5 }}>
-        <div style={{ position:"relative" }}>
+        {/* Floating dust particles */}
+        {[
+          { left:"8%", top:"80%", delay:"0s", dur:"8s", size:3 },
+          { left:"90%", top:"70%", delay:"2s", dur:"11s", size:2 },
+          { left:"15%", top:"40%", delay:"4s", dur:"9s", size:3 },
+          { left:"80%", top:"20%", delay:"1s", dur:"13s", size:2 },
+          { left:"50%", top:"90%", delay:"3s", dur:"7s", size:4 },
+          { left:"35%", top:"60%", delay:"5.5s", dur:"10s", size:2 },
+        ].map((p,i) => (
+          <div key={i} className="letter-dust" style={{
+            width:p.size, 
+            height:p.size,
+            left:p.left, 
+            top:p.top,
+            animation:`letterFloat ${p.dur} linear ${p.delay} infinite`,
+          }} />
+        ))}
 
-          {/* Book */}
-          <div style={{ display:"flex", borderRadius:"3px 6px 6px 3px", position:"relative" }}>
+        {/* Section intro */}
+        <div className="letter-intro">
+          <p className="letter-intro-label">A letter for you</p>
+          <h2 className="letter-intro-title">
+            Dear <em style={{ fontStyle:"italic", color:"#ff6fb7" }}>My Princess</em>
+          </h2>
+        </div>
+
+        {/* Book wrapper */}
+        <div className="letter-book-wrapper">
+          <div className="letter-book">
 
             {/* Spine */}
-            <div style={{
-              width:28, flexShrink:0,
-              background:"linear-gradient(to right,#0f0408,#1a0810,#0f0408)",
-              borderRadius:"3px 0 0 3px",
-              borderLeft:"2px solid #2a0d18",
-              borderTop:"1px solid #2a0d18",
-              borderBottom:"1px solid #2a0d18",
-              position:"relative",
-            }}>
-              <div style={{
-                position:"absolute", left:"50%", top:"10%", bottom:"10%", width:1,
-                background:"linear-gradient(to bottom,transparent,rgba(255,111,183,.2) 30%,rgba(255,111,183,.2) 70%,transparent)",
-                transform:"translateX(-50%)",
-              }} />
-            </div>
+            <div className="letter-spine" />
 
             {/* Cover left */}
-            <div style={{
-              width:36, flexShrink:0,
-              background:"#100610",
-              borderTop:"1px solid #220d1a",
-              borderBottom:"1px solid #220d1a",
-              position:"relative", overflow:"hidden",
-            }}>
-              <div style={{
-                position:"absolute", inset:0,
-                backgroundImage:"repeating-linear-gradient(0deg,transparent,transparent 4px,rgba(255,111,183,.012) 4px,rgba(255,111,183,.012) 5px)",
-              }} />
-            </div>
+            <div className="letter-cover letter-cover-left" />
 
             {/* Pages block */}
-            <div style={{ flex:1, display:"flex", position:"relative" }}>
-
-              {/* Shadows & gutter */}
-              <div style={{ position:"absolute", left:0, top:0, bottom:0, width:22, background:"linear-gradient(to right,rgba(0,0,0,.7),transparent)", zIndex:4, pointerEvents:"none" }} />
-              <div style={{ position:"absolute", left:"50%", top:0, bottom:0, width:32, transform:"translateX(-50%)", background:"linear-gradient(to right,rgba(0,0,0,.5),rgba(0,0,0,.75) 45%,rgba(0,0,0,.75) 55%,rgba(0,0,0,.5))", zIndex:4, pointerEvents:"none" }} />
-              <div style={{ position:"absolute", right:0, top:0, bottom:0, width:22, background:"linear-gradient(to left,rgba(0,0,0,.7),transparent)", zIndex:4, pointerEvents:"none" }} />
+            <div className="letter-pages">
+              <div className="letter-pages-shadow letter-pages-shadow-left" />
+              <div className="letter-pages-shadow letter-pages-shadow-center" />
+              <div className="letter-pages-shadow letter-pages-shadow-right" />
 
               {/* LEFT PAGE */}
-              <div style={{
-                flex:1, background:"#100810",
-                padding:"3rem 2.6rem 3.8rem",
-                position:"relative",
-                borderTop:"1px solid #1e0d18",
-                borderBottom:"1px solid #1e0d18",
-                overflow:"hidden",
-              }}>
-                {/* Lined bg */}
-                <div style={{
-                  position:"absolute", inset:0, pointerEvents:"none",
-                  backgroundImage:"repeating-linear-gradient(transparent,transparent 30px,rgba(255,111,183,.038) 30px,rgba(255,111,183,.038) 31px)",
-                  backgroundPosition:"0 3rem",
-                }} />
+              <div className="letter-page">
+                <div className="letter-page-lines" />
+                <div className="letter-bookmark" />
 
-                {/* Bookmark */}
-                <div style={{
-                  position:"absolute", top:-1, right:"3rem",
-                  width:16, height:64,
-                  background:"#5a0e25",
-                  clipPath:"polygon(0 0,100% 0,100% 83%,50% 100%,0 83%)",
-                  zIndex:5,
-                }} />
+                <div className="letter-page-content">
+                  <div className="letter-chapter-rule">
+                    <div className="letter-rule-line" />
+                    <div className="letter-rule-dot" />
+                    <div className="letter-rule-line" />
+                  </div>
 
-                {/* Chapter rule */}
-                <div style={{ display:"flex", alignItems:"center", gap:".5rem", marginBottom:"2rem" }}>
-                  <div style={{ flex:1, height:.5, background:"rgba(255,111,183,.18)" }} />
-                  <div style={{ width:5, height:5, background:"rgba(255,111,183,.35)", transform:"rotate(45deg)", flexShrink:0 }} />
-                  <div style={{ flex:1, height:.5, background:"rgba(255,111,183,.18)" }} />
+                  <p className="letter-label">Dear Alaa,</p>
+
+                  {[
+                    { text: "Tonight, the world celebrates something rare — you… Twenty-one years of a presence that has brought beauty to everything it has touched.", drop: true },
+                    { text: "You have grown with a grace that few possess… You have faced hardships with your head held high, without ever losing your gentleness, your smile, or that special light that has lived within you from the very beginning." },
+                    { text: "My princess… you deserve every happiness in this world. You deserve to be loved, celebrated, and admired — not just today, but every single day of your life." },
+                    { text: "To me… you are the best person in this world, and the most important one in my life. I love you in an extraordinary way — a love unlike anything else… one that goes beyond words, and cannot truly be described." },
+                    { text: "You are calm… and serenity. A comfort to everyone who comes close to you. You have a soul and an energy more beautiful than anything…" },
+                  ].map((p, i) => (
+                    <p key={i} className={`letter-paragraph ${p.drop ? 'drop-cap' : ''}`}
+                      style={{ textIndent: p.drop ? 0 : "1.5em" }}>
+                      {p.text}
+                    </p>
+                  ))}
                 </div>
 
-                <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:3, textTransform:"uppercase", color:"rgba(255,111,183,.45)", marginBottom:"1.8rem" }}>
-                  Dear Alaa,
-                </p>
-
-                {/* Drop cap paragraph */}
-                <style>{`
-                  .drop-cap::first-letter {
-                    font-style: normal;
-                    font-size: 3.6rem;
-                    font-weight: 600;
-                    float: left;
-                    line-height: .8;
-                    margin-right: .08em;
-                    margin-top: .08em;
-                    color: #ff6fb7;
-                    font-family: 'Cormorant Garamond', serif;
-                  }
-                `}</style>
-
-                {[
-                  { text: "Tonight, the world celebrates something rare — you… Twenty-one years of a presence that has brought beauty to everything it has touched.", drop: true },
-                  { text: "You have grown with a grace that few possess… You have faced hardships with your head held high, without ever losing your gentleness, your smile, or that special light that has lived within you from the very beginning." },
-                  { text: "My princess… you deserve every happiness in this world. You deserve to be loved, celebrated, and admired — not just today, but every single day of your life." },
-                  { text: "To me… you are the best person in this world, and the most important one in my life. I love you in an extraordinary way — a love unlike anything else… one that goes beyond words, and cannot truly be described." },
-                  { text: "You are calm… and serenity. A comfort to everyone who comes close to you. You have a soul and an energy more beautiful than anything…" },
-                ].map((p, i) => (
-                  <p key={i} className={p.drop ? "drop-cap" : ""}
-                    style={{
-                      fontFamily:"'Cormorant Garamond',serif",
-                      fontStyle:"italic",
-                      fontSize:"1.06rem",
-                      lineHeight:2.1,
-                      color:"rgba(240,221,232,.76)",
-                      textAlign:"justify",
-                      marginBottom:"1.25rem",
-                      textIndent: p.drop ? 0 : "1.5em",
-                    }}>
-                    {p.text}
-                  </p>
-                ))}
-
-                <p style={{ position:"absolute", bottom:"1.3rem", left:"2.6rem", fontFamily:"'Cormorant Garamond',serif", fontSize:".9rem", fontWeight:300, color:"rgba(255,111,183,.2)", letterSpacing:2 }}>i</p>
+                <p className="letter-page-number letter-page-number-left">i</p>
               </div>
 
               {/* RIGHT PAGE */}
-              <div style={{
-                flex:1, background:"#100810",
-                padding:"3rem 2.6rem 3.8rem",
-                position:"relative",
-                borderTop:"1px solid #1e0d18",
-                borderBottom:"1px solid #1e0d18",
-                overflow:"hidden",
-              }}>
-                <div style={{
-                  position:"absolute", inset:0, pointerEvents:"none",
-                  backgroundImage:"repeating-linear-gradient(transparent,transparent 30px,rgba(255,111,183,.038) 30px,rgba(255,111,183,.038) 31px)",
-                  backgroundPosition:"0 3rem",
-                }} />
+              <div className="letter-page">
+                <div className="letter-page-lines" />
 
-                {/* Chapter rule */}
-                <div style={{ display:"flex", alignItems:"center", gap:".5rem", marginBottom:"2rem" }}>
-                  <div style={{ flex:1, height:.5, background:"rgba(255,111,183,.18)" }} />
-                  <div style={{ width:5, height:5, background:"rgba(255,111,183,.35)", transform:"rotate(45deg)", flexShrink:0 }} />
-                  <div style={{ flex:1, height:.5, background:"rgba(255,111,183,.18)" }} />
-                </div>
-
-                {[
-                  "…and that beauty doesn't just live within you — it reflects on your face, making you the most beautiful person in this universe.",
-                  "And your smile… that smile that gives life its meaning. But your eyes… they are another story — a completely different world. When one looks into them… everything else fades away, and time and space take on an entirely different meaning.",
-                  "From the bottom of my heart… I wish that sadness never comes near you, and that you always remain happy, smiling — just as you are now. I pray that God grants you a bright future… full of success and joy, where all your dreams and ambitions come true — and even more.",
-                  "At twenty-one… the world is yours. Take it your way, at your own pace — you know your worth.",
-                  "Thank you… for being you. Simply… for being you.",
-                ].map((text, i) => (
-                  <p key={i} style={{
-                    fontFamily:"'Cormorant Garamond',serif",
-                    fontStyle:"italic",
-                    fontSize: i === 4 ? ".93rem" : "1.06rem",
-                    lineHeight:2.1,
-                    color: i === 4 ? "rgba(240,221,232,.5)" : "rgba(240,221,232,.76)",
-                    textAlign:"justify",
-                    marginBottom:"1.25rem",
-                    textIndent:"1.5em",
-                  }}>
-                    {text}
-                  </p>
-                ))}
-
-                {/* Wax seal + closing */}
-                <div style={{ display:"flex", alignItems:"center", gap:"1.2rem", marginTop:"2rem" }}>
-                  <div style={{
-                    width:46, height:46, borderRadius:"50%", flexShrink:0,
-                    background:"#380d1e",
-                    border:"1.5px solid #6a1535",
-                    display:"flex", alignItems:"center", justifyContent:"center",
-                    position:"relative",
-                  }}>
-                    <div style={{ position:"absolute", inset:5, borderRadius:"50%", border:"1px solid rgba(255,111,183,.18)" }} />
-                    <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.1rem", fontStyle:"italic", color:"rgba(255,111,183,.65)" }}>Aymen</span>
+                <div className="letter-page-content">
+                  <div className="letter-chapter-rule">
+                    <div className="letter-rule-line" />
+                    <div className="letter-rule-dot" />
+                    <div className="letter-rule-line" />
                   </div>
-                  <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:2, textTransform:"uppercase", color:"rgba(255,111,183,.3)", lineHeight:1.9 }}>
-                    With all the love in the world<br />— 10 May 2026
-                  </p>
+
+                  {[
+                    "…and that beauty doesn't just live within you — it reflects on your face, making you the most beautiful person in this universe.",
+                    "And your smile… that smile that gives life its meaning. But your eyes… they are another story — a completely different world. When one looks into them… everything else fades away, and time and space take on an entirely different meaning.",
+                    "From the bottom of my heart… I wish that sadness never comes near you, and that you always remain happy, smiling — just as you are now. I pray that God grants you a bright future… full of success and joy, where all your dreams and ambitions come true — and even more.",
+                    "At twenty-one… the world is yours. Take it your way, at your own pace — you know your worth.",
+                    "Thank you… for being you. Simply… for being you.",
+                  ].map((text, i) => (
+                    <p key={i} className={`letter-paragraph ${i === 4 ? 'letter-paragraph-closing' : ''}`}>
+                      {text}
+                    </p>
+                  ))}
+
+                  <div className="letter-closing">
+                    <div className="letter-wax-seal">Aymen</div>
+                    <p className="letter-closing-text">
+                      With all the love in the world<br />— 10 May 2026
+                    </p>
+                  </div>
                 </div>
 
-                <p style={{ position:"absolute", bottom:"1.3rem", right:"2.6rem", fontFamily:"'Cormorant Garamond',serif", fontSize:".9rem", fontWeight:300, color:"rgba(255,111,183,.2)", letterSpacing:2 }}>ii</p>
+                <p className="letter-page-number letter-page-number-right">ii</p>
               </div>
 
             </div>
 
             {/* Cover right */}
-            <div style={{
-              width:36, flexShrink:0,
-              background:"#100610",
-              borderTop:"1px solid #220d1a",
-              borderBottom:"1px solid #220d1a",
-              borderRight:"3px solid #060308",
-              borderRadius:"0 5px 5px 0",
-              position:"relative", overflow:"hidden",
-            }}>
-              <div style={{ position:"absolute", bottom:-6, left:9, width:10, height:55, background:"rgba(160,40,80,.45)" }} />
-            </div>
+            <div className="letter-cover letter-cover-right" />
 
           </div>
 
           {/* Quill pen SVG */}
-          <svg width="90" height="220" viewBox="0 0 90 220"
-            style={{ position:"absolute", bottom:-30, right:-20, zIndex:6, opacity:.85 }}
-            fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg className="letter-quill" viewBox="0 0 90 220" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g transform="rotate(-20,45,110)">
               <path d="M45 10 C42 30 38 55 36 85 C34 115 35 145 38 175 L40 210 L43 210 L45 175 C46 145 46 115 44 85 C42 55 44 30 45 10Z" fill="#e8c87a" opacity=".9"/>
               <path d="M45 10 C48 22 52 45 52 70 C52 95 49 125 46 155 L44 175 L45 175 C46 145 46 115 44 85 C42 55 44 30 45 10Z" fill="#c8a050" opacity=".7"/>
@@ -3975,9 +4520,7 @@ function Letter() {
           </svg>
 
           {/* Ink trail */}
-          <svg width="180" height="30" viewBox="0 0 180 30"
-            style={{ position:"absolute", bottom:42, right:40, zIndex:6, opacity:.3 }}
-            fill="none">
+          <svg className="letter-ink-trail" viewBox="0 0 180 30" fill="none">
             <path d="M0 15 Q45 5 90 15 Q135 25 180 15" stroke="#ff6fb7" strokeWidth=".6" fill="none"/>
             <path d="M10 20 Q55 10 100 18 Q145 26 175 18" stroke="#ff6fb7" strokeWidth=".4" fill="none"/>
           </svg>
@@ -3985,17 +4528,17 @@ function Letter() {
         </div>
 
         {/* Fin */}
-        <div style={{ display:"flex", alignItems:"center", gap:"1rem", marginTop:"2rem" }}>
-          <div style={{ flex:1, height:.5, background:"linear-gradient(to right,transparent,rgba(255,111,183,.15))" }} />
-          <span style={{ fontSize:9, letterSpacing:4, color:"rgba(255,111,183,.2)", textTransform:"uppercase", whiteSpace:"nowrap" }}>fin</span>
-          <div style={{ flex:1, height:.5, background:"linear-gradient(to left,transparent,rgba(255,111,183,.15))" }} />
+        <div className="letter-fin">
+          <div className="letter-fin-line letter-fin-line-left" />
+          <span className="letter-fin-text">fin</span>
+          <div className="letter-fin-line letter-fin-line-right" />
         </div>
 
-      </div>
-
-    </section>
+      </section>
+    </>
   );
 }
+
 
 // ─── CLOSING ────────────────────────────────────────────────────────────────
 function Petal({ style }) {
