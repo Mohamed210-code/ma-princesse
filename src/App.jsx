@@ -4379,7 +4379,7 @@ function Letter() {
         }
       `}</style>
 
-      <section className="letter-section">
+      <section id="Letter" className="letter-section">
         <LibraryBackground />
         
         <div className="letter-glow" />
